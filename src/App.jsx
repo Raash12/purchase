@@ -1,4 +1,4 @@
-import Branches from "./components/Branches";
+import Branches from "./branch/Branches";
 
 function App() {
   return (
