@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { collection, addDoc, getDocs, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "../firebase";
+import { supabase } from "../supabaseClient"; // ✅ Supabase client
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-
-// 🟢 Your ImgBB API key
-const IMGBB_API_KEY = "409164d54cc9cb69bc6e0c8910d9f487";
 
 const AddOrder = () => {
   const [itemName, setItemName] = useState("");
@@ -52,25 +50,26 @@ const AddOrder = () => {
     if (e.target.files[0]) setFile(e.target.files[0]);
   };
 
-  // 🔹 Upload to ImgBB
-  const uploadFileToImgBB = async () => {
+  // 🔹 Upload to Supabase Storage
+  const uploadFileToSupabase = async () => {
     if (!file) return "";
 
     try {
-      const formData = new FormData();
-      formData.append("image", file);
+      const fileName = `${Date.now()}_${file.name}`;
+      const { data, error } = await supabase.storage
+        .from("orders") // bucket name
+        .upload(fileName, file);
 
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-        method: "POST",
-        body: formData,
-      });
+      if (error) throw error;
 
-      const data = await res.json();
-      if (!data.success) throw new Error(data.error.message || "ImgBB upload failed");
+      // ✅ Get public URL
+      const { data: publicUrlData } = supabase.storage
+        .from("orders")
+        .getPublicUrl(fileName);
 
-      return data.data.url;
+      return publicUrlData.publicUrl;
     } catch (err) {
-      console.error("ImgBB upload error:", err);
+      console.error("Supabase upload error:", err);
       alert("File upload failed: " + err.message);
       return "";
     }
@@ -87,7 +86,8 @@ const AddOrder = () => {
     setLoading(true);
 
     try {
-      const fileURL = file ? await uploadFileToImgBB() : "";
+      // Upload file
+      const fileURL = file ? await uploadFileToSupabase() : "";
 
       const newOrder = {
         itemName,
@@ -106,6 +106,8 @@ const AddOrder = () => {
       await addDoc(collection(db, "orders"), newOrder);
 
       alert("✅ Order has been successfully saved!");
+
+      // ✅ Clear all inputs
       setItemName("");
       setQuantity("");
       setPrice("");
@@ -114,6 +116,9 @@ const AddOrder = () => {
       setDescription("");
       setBranchUsers([]);
       setFile(null);
+
+      // Optional: clear file input in DOM
+      document.getElementById("fileInput").value = "";
     } catch (err) {
       console.error(err);
       alert("Failed to save order: " + err.message);
@@ -181,6 +186,7 @@ const AddOrder = () => {
 
           <input
             type="file"
+            id="fileInput" // ✅ Add ID to reset file input
             onChange={handleFileChange}
             className="border border-gray-300 rounded-lg p-2"
           />
@@ -198,4 +204,4 @@ const AddOrder = () => {
   );
 };
 
-export default AddOrder;   
+export default AddOrder;
