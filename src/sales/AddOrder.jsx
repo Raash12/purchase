@@ -10,7 +10,7 @@ const AddOrder = () => {
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [branch, setBranch] = useState("");
-  const [description, setDescription] = useState(""); // 🆕 description
+  const [description, setDescription] = useState("");
   const [branches, setBranches] = useState([]);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const AddOrder = () => {
       price: Number(price),
       branch,
       total: Number(quantity) * Number(price),
-      description, // 🆕 save description
+      description,
       createdAt: serverTimestamp(),
       userId: user.uid,
       userEmail: user.email,
@@ -43,7 +43,7 @@ const AddOrder = () => {
 
     await addDoc(collection(db, "orders"), newOrder);
 
-    alert("Order has been successfully saved!");
+    alert("✅ Order has been successfully saved!");
     setItemName("");
     setQuantity("");
     setPrice("");
@@ -55,7 +55,9 @@ const AddOrder = () => {
     <div className="max-w-2xl mx-auto mt-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold text-center">Add New Order</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-center">
+            Add New Order
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Input
@@ -75,8 +77,7 @@ const AddOrder = () => {
             value={price}
             onChange={e => setPrice(e.target.value)}
           />
-          
-          {/* 🆕 Description field */}
+
           <textarea
             placeholder="Description (optional)"
             value={description}
@@ -86,18 +87,20 @@ const AddOrder = () => {
 
           <select
             value={branch}
-            onChange={(e) => setBranch(e.target.value)}
+            onChange={e => setBranch(e.target.value)}
             className="border border-gray-300 rounded-lg p-2"
           >
             <option value="">-- Select Branch --</option>
             {branches.map(b => (
-              <option key={b.id} value={b.name}>{b.name}</option>
+              <option key={b.id} value={b.name}>
+                {b.name}
+              </option>
             ))}
           </select>
 
           <Button
             onClick={handleAddOrder}
-            className="bg-gradient-to-r from-purple-600 to-pink-500 text-white"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg"
           >
             Save Order
           </Button>

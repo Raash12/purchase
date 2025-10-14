@@ -1,19 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "../firebase";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { db, auth } from "../firebase";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 
-const OrdersListAll = () => {
+const OrdersList = () => {
   const [orders, setOrders] = useState([]);
+  const [userBranch, setUserBranch] = useState("");
 
   useEffect(() => {
-    fetchOrders();
+    getUserBranch();
   }, []);
 
-  const fetchOrders = async () => {
+  const getUserBranch = async () => {
     try {
-      // 🔹 Soo saar dhammaan dalabyada, descending order by createdAt
-      const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+      const user = auth.currentUser;
+      if (!user) return;
+
+      // Fetch user branch from Firestore users collection
+      const userSnap = await getDocs(collection(db, "users"));
+      const userDoc = userSnap.docs.find(d => d.data().email === user.email);
+      if (userDoc) {
+        const branch = userDoc.data().branch;
+        setUserBranch(branch);
+        fetchOrders(branch);
+      }
+    } catch (error) {
+      console.error("Error fetching user branch:", error);
+    }
+  };
+
+  const fetchOrders = async (branch) => {
+    try {
+      const q = query(
+        collection(db, "orders"),
+        where("branch", "==", branch),
+        orderBy("createdAt", "desc")
+      );
       const snapshot = await getDocs(q);
       setOrders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     } catch (error) {
@@ -26,14 +48,14 @@ const OrdersListAll = () => {
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-semibold text-center">
-            All Orders
+            Orders - {userBranch || "Loading..."}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-200 text-gray-700">
+                <tr className="bg-blue-600 text-white">
                   <th className="p-2 border">Item Name</th>
                   <th className="p-2 border">Quantity</th>
                   <th className="p-2 border">Price</th>
@@ -44,7 +66,7 @@ const OrdersListAll = () => {
               </thead>
               <tbody>
                 {orders.length > 0 ? (
-                  orders.map((order) => (
+                  orders.map(order => (
                     <tr key={order.id} className="hover:bg-gray-100">
                       <td className="p-2 border">{order.itemName}</td>
                       <td className="p-2 border">{order.quantity}</td>
@@ -57,7 +79,7 @@ const OrdersListAll = () => {
                 ) : (
                   <tr>
                     <td colSpan="7" className="text-center py-4 text-gray-500">
-                      No orders found
+                      No orders found for this branch.
                     </td>
                   </tr>
                 )}
@@ -70,4 +92,4 @@ const OrdersListAll = () => {
   );
 };
 
-export default OrdersListAll;
+export default OrdersList;

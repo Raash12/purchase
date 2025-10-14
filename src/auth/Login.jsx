@@ -32,22 +32,32 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-200 to-pink-200">
-      <Card className="w-full max-w-md p-8 rounded-2xl shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
+      <Card className="w-full max-w-md p-8 rounded-2xl shadow-lg border border-gray-200">
         <CardHeader>
-          <CardTitle className="text-3xl text-center mb-4">Login</CardTitle>
+          <CardTitle className="text-3xl text-center mb-4 text-black">Login</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <Input placeholder="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-          <Input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+          <Input 
+            placeholder="Email" 
+            type="email" 
+            value={email} 
+            onChange={e => setEmail(e.target.value)} 
+          />
+          <Input 
+            placeholder="Password" 
+            type="password" 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+          />
 
-          <Button onClick={handleLogin} className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+          <Button onClick={handleLogin} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
             Login
           </Button>
 
           <p className="text-center text-gray-600 text-sm">
-            Don’t have an account?{" "}
-            <Link to="/signup" className="text-purple-500 hover:underline">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-blue-600 hover:underline">
               Sign Up
             </Link>
           </p>

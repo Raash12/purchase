@@ -93,9 +93,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-200 to-pink-200 p-4">
-      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100 p-4">
+      <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm border border-gray-200">
+        <h2 className="text-2xl font-bold text-center mb-6 text-black">Sign Up</h2>
         
         <div className="flex flex-col gap-3">
           <Input 
@@ -125,7 +125,7 @@ const Signup = () => {
           <select 
             value={role} 
             onChange={e => setRole(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
           >
             <option value="">Select Role</option>
             <option value="sales">Sales</option>
@@ -138,7 +138,7 @@ const Signup = () => {
             <select 
               value={branch} 
               onChange={e => setBranch(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
             >
               <option value="">Select Branch</option>
               {branches.map(b => (
@@ -148,7 +148,7 @@ const Signup = () => {
           )}
 
           <Button 
-            className="w-full mt-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white" 
+            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white" 
             onClick={handleSignup}
             disabled={loading}
           >
@@ -157,7 +157,7 @@ const Signup = () => {
 
           <p className="text-center text-gray-600 text-sm mt-4">
             Already have an account?{" "}
-            <Link to="/login" className="text-purple-500 hover:underline">
+            <Link to="/login" className="text-blue-600 hover:underline">
               Login
             </Link>
           </p>
