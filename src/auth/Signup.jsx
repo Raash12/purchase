@@ -31,8 +31,13 @@ const Signup = () => {
   }, []);
 
   const handleSignup = async () => {
-    if (!fullName || !email || !password || !role || !branch) {
+    if (!fullName || !email || !password || !role) {
       return alert("Please fill all fields");
+    }
+
+    // Only require branch for suppliers
+    if (role === "supplier" && !branch) {
+      return alert("Please select a branch for supplier role");
     }
 
     if (password.length < 6) {
@@ -45,14 +50,21 @@ const Signup = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      await setDoc(doc(db, "users", user.uid), {
+      // Prepare user data - only include branch for suppliers
+      const userData = {
         uid: user.uid,
         fullName,
         email,
         role,
-        branch,
         createdAt: serverTimestamp(),
-      });
+      };
+
+      // Add branch only for suppliers
+      if (role === "supplier") {
+        userData.branch = branch;
+      }
+
+      await setDoc(doc(db, "users", user.uid), userData);
 
       // Redirect to login page after successful signup
       alert("Account created successfully! Please login.");
@@ -121,17 +133,19 @@ const Signup = () => {
             <option value="supplier">Supplier</option>
           </select>
 
-          {/* Branch Dropdown */}
-          <select 
-            value={branch} 
-            onChange={e => setBranch(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          >
-            <option value="">Select Branch</option>
-            {branches.map(b => (
-              <option key={b.id} value={b.name}>{b.name}</option>
-            ))}
-          </select>
+          {/* Branch Dropdown - Only show for suppliers */}
+          {role === "supplier" && (
+            <select 
+              value={branch} 
+              onChange={e => setBranch(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">Select Branch</option>
+              {branches.map(b => (
+                <option key={b.id} value={b.name}>{b.name}</option>
+              ))}
+            </select>
+          )}
 
           <Button 
             className="w-full mt-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white" 
