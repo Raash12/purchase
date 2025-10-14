@@ -4,6 +4,9 @@ import Login from "./auth/Login";
 import SalesDashboard from "./dashboard/SalesDashboard";
 import FinanceDashboard from "./dashboard/FinanceDashboard";
 import SupplierDashboard from "./dashboard/SupplierDashboard";
+import AddOrder from "./sales/AddOrder";
+import OrdersList from "./sales/OrdersList";
+
 
 function App() {
   return (
@@ -12,7 +15,15 @@ function App() {
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard/sales" element={<SalesDashboard />} />
+
+        {/* ---- SALES DASHBOARD LAYOUT ---- */}
+        <Route path="/dashboard/sales" element={<SalesDashboard />}>
+          <Route index element={<div>Welcome to Sales Dashboard</div>} />
+          <Route path="add-order" element={<AddOrder />} />
+          <Route path="orders-list" element={<OrdersList />} /> 
+        </Route>
+
+        {/* ---- OTHER DASHBOARDS ---- */}
         <Route path="/dashboard/finance" element={<FinanceDashboard />} />
         <Route path="/dashboard/supplier" element={<SupplierDashboard />} />
       </Routes>

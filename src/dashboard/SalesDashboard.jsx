@@ -1,20 +1,17 @@
-// SalesDashboard.jsx
 import React from "react";
-import { auth } from "../firebase";
-
-import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Sidebar from "components/Sidebar"; // ama ../layout/Sidebar haddii halkaas yaallo
 
 const SalesDashboard = () => {
-  const navigate = useNavigate();
-  const handleLogout = async () => {
-    await auth.signOut();
-    navigate("/login");
-  };
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-      <h1 className="text-3xl font-bold mb-4">Sales Dashboard</h1>
-      <button onClick={handleLogout} className="btn-primary">Logout</button>
+    <div className="flex min-h-screen">
+      {/* Sidebar mar walba muuqda */}
+      <Sidebar />
+
+      {/* Main content area */}
+      <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
+        <Outlet /> {/* Bog kasta sida AddOrder wuxuu ku soo muuqanayaa halkan */}
+      </div>
     </div>
   );
 };
