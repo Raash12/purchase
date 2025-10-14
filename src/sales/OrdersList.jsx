@@ -1,54 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
-import { db, auth } from "../firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../firebase";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 
-const OrdersList = () => {
+const OrdersListAll = () => {
   const [orders, setOrders] = useState([]);
-  const [userBranch, setUserBranch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUserBranch();
+    fetchAllOrders();
   }, []);
 
-  const getUserBranch = async () => {
+  const fetchAllOrders = async () => {
     try {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      // Fetch user branch from Firestore users collection
-      const userSnap = await getDocs(collection(db, "users"));
-      const userDoc = userSnap.docs.find(d => d.data().email === user.email);
-      if (userDoc) {
-        const branch = userDoc.data().branch;
-        setUserBranch(branch);
-        fetchOrders(branch);
-      }
-    } catch (error) {
-      console.error("Error fetching user branch:", error);
-    }
-  };
-
-  const fetchOrders = async (branch) => {
-    try {
-      const q = query(
-        collection(db, "orders"),
-        where("branch", "==", branch),
-        orderBy("createdAt", "desc")
-      );
+      // Create query: all orders ordered by creation time descending
+      const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
-      setOrders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setOrders(ordersData);
     } catch (error) {
       console.error("Error fetching orders:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <div className="text-center mt-8 text-gray-500">Loading orders...</div>;
+  }
 
   return (
     <div className="max-w-5xl mx-auto mt-8">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-semibold text-center">
-            Orders - {userBranch || "Loading..."}
+            All Orders
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -61,7 +47,9 @@ const OrdersList = () => {
                   <th className="p-2 border">Price</th>
                   <th className="p-2 border">Total</th>
                   <th className="p-2 border">Branch</th>
+                  <th className="p-2 border">Assigned User</th>
                   <th className="p-2 border">Description</th>
+                  <th className="p-2 border">File</th>
                 </tr>
               </thead>
               <tbody>
@@ -73,13 +61,26 @@ const OrdersList = () => {
                       <td className="p-2 border">{order.price}</td>
                       <td className="p-2 border font-semibold">{order.total}</td>
                       <td className="p-2 border">{order.branch}</td>
+                      <td className="p-2 border">{order.assignedUser || "—"}</td>
                       <td className="p-2 border">{order.description || "—"}</td>
+                      <td className="p-2 border">
+                        {order.fileURL ? (
+                          <a
+                            href={order.fileURL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            View File
+                          </a>
+                        ) : "—"}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center py-4 text-gray-500">
-                      No orders found for this branch.
+                    <td colSpan="8" className="text-center py-4 text-gray-500">
+                      No orders found.
                     </td>
                   </tr>
                 )}
@@ -92,4 +93,4 @@ const OrdersList = () => {
   );
 };
 
-export default OrdersList;
+export default OrdersListAll;
