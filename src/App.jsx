@@ -12,6 +12,7 @@ import SalesDashboard from "./dashboard/SalesDashboard";
 // Supplier pages
 import SupplierViewOrders from "./supplier/SupplierOrdersView";
 import SupplierSubmitFinance from "./supplier/SupplierSubmitFinance";
+import SupplierSalaamBank from "./supplier/SupplierSalaamBank";
 
 // Finance pages
 import FinanceTasks from "./finance/FinanceTasks";
@@ -41,6 +42,7 @@ function App() {
           <Route index element={<div className="text-center mt-8">Welcome Supplier!</div>} />
           <Route path="orders" element={<SupplierViewOrders />} />
           <Route path="submit-finance" element={<SupplierSubmitFinance />} />
+          <Route path="salaam-bank" element={<SupplierSalaamBank />} />
         </Route>
 
         {/* FINANCE DASHBOARD */}
