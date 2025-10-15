@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Home, Package, List } from "lucide-react";
+import { LogOut, Home, FileText, Upload } from "lucide-react";
 import { auth } from "../firebase";
 
 const SupplierSidebar = () => {
@@ -24,10 +24,17 @@ const SupplierSidebar = () => {
           </button>
 
           <button
-            onClick={() => navigate("/dashboard/supplier/tasks")}
+            onClick={() => navigate("/dashboard/supplier/orders")}
             className="flex items-center gap-2 hover:bg-white/20 p-2 rounded-lg"
           >
-            <Package size={18} /> My Tasks
+            <FileText size={18} /> View Orders
+          </button>
+
+          <button
+            onClick={() => navigate("/dashboard/supplier/submit-finance")}
+            className="flex items-center gap-2 hover:bg-white/20 p-2 rounded-lg"
+          >
+            <Upload size={18} /> Submit to Finance
           </button>
         </nav>
       </div>
