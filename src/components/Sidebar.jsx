@@ -12,27 +12,27 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-gradient-to-b from-blue-700 to-blue-500 text-white flex flex-col justify-between min-h-screen p-4">
+    <div className="w-64 bg-gradient-to-b from-gray-900 to-blue-950 text-white flex flex-col justify-between min-h-screen p-4">
       <div>
         <h2 className="text-2xl font-bold mb-8 text-center">Sales Panel</h2>
         <nav className="flex flex-col gap-4">
           <button
             onClick={() => navigate("/dashboard/sales")}
-            className="flex items-center gap-2 hover:bg-white/20 p-2 rounded-lg"
+            className="flex items-center gap-2 p-2 rounded-lg w-full bg-white hover:bg-gray-200 text-black font-medium"
           >
             <Home size={18} /> Dashboard
           </button>
 
           <button
             onClick={() => navigate("/dashboard/sales/add-order")}
-            className="flex items-center gap-2 hover:bg-white/20 p-2 rounded-lg"
+            className="flex items-center gap-2 p-2 rounded-lg w-full bg-white hover:bg-gray-200 text-black font-medium"
           >
-            <Package size={18} /> Add Order
+            <Package size={18} /> Orders
           </button>
 
           <button
             onClick={() => navigate("/dashboard/sales/orders-list")}
-            className="flex items-center gap-2 hover:bg-white/20 p-2 rounded-lg"
+            className="flex items-center gap-2 p-2 rounded-lg w-full bg-white hover:bg-gray-200 text-black font-medium"
           >
             <List size={18} /> View Orders
           </button>
@@ -41,7 +41,7 @@ const Sidebar = () => {
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg mt-4 transition-all"
+        className="flex items-center gap-2 p-2 rounded-lg w-full bg-white hover:bg-gray-200 text-black font-medium"
       >
         <LogOut size={18} /> Logout
       </button>
