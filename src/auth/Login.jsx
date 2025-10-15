@@ -51,13 +51,13 @@ const Login = () => {
             onChange={e => setPassword(e.target.value)} 
           />
 
-          <Button onClick={handleLogin} className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+          <Button onClick={handleLogin} className="w-full mt-2 bg-blue-950 hover:bg-blue-900 text-white">
             Login
           </Button>
 
           <p className="text-center text-gray-600 text-sm">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline">
+            <Link to="/signup" className="text-blue-950 hover:underline">
               Sign Up
             </Link>
           </p>

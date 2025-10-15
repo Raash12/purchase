@@ -125,7 +125,7 @@ const Signup = () => {
           <select 
             value={role} 
             onChange={e => setRole(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-950 text-black bg-white"
           >
             <option value="">Select Role</option>
             <option value="sales">Sales</option>
@@ -138,7 +138,7 @@ const Signup = () => {
             <select 
               value={branch} 
               onChange={e => setBranch(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black bg-white"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-950 text-black bg-white"
             >
               <option value="">Select Branch</option>
               {branches.map(b => (
@@ -147,17 +147,18 @@ const Signup = () => {
             </select>
           )}
 
-          <Button 
-            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white" 
-            onClick={handleSignup}
-            disabled={loading}
-          >
-            {loading ? "Creating Account..." : "Sign Up"}
-          </Button>
+          <Button
+  className="w-full mt-2 bg-blue-950 hover:bg-blue-900 text-white"
+  onClick={handleSignup}
+  disabled={loading}
+>
+  {loading ? "Creating Account..." : "Sign Up"}
+</Button>
+
 
           <p className="text-center text-gray-600 text-sm mt-4">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 hover:underline">
+            <Link to="/login" className="text-blue-950 hover:underline">
               Login
             </Link>
           </p>
